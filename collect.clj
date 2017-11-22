@@ -1,21 +1,21 @@
 (use 'autodoc-collect.collect-info)
 (collect-info-to-file 
-  ;; Clojure repo directory
+  ;; Repo directory
   "repo/"
 
-  ;; Relative path in repo to Clojure source
+  ;; Relative path in repo to source
   "src/main/clojure"
 
   ;; Analyze these namespaces 
   "clojure.core.cache"
 
-  ;; Skip these namespaces
-  "clojure/core.clj:clojure/parallel.clj" 
+  ;; Skip loading these namespaces
+  ""
 
   ;; Trim prefix - don't set
   nil
  
-  ;; Output analysis data file 
+  ;; Output analysis data file
   "analysis.edn"
 
   ;; Branch name

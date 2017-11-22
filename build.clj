@@ -16,6 +16,8 @@
     {:root (str (.getAbsolutePath (File. "repo")) "/")
      :output-path (str (.getAbsolutePath (File. "repo-docs")) "/")}))
 
-(let [branch-info {:name "master" :version :from-pom :status "stable" :first? true}
+(let [branch-info {:name "master" :version "0.6.6" :status "stable" :first? true}
       all-branch-info (:branches shared)]
   (h/make-all-pages branch-info all-branch-info (edn-read "analysis.edn")))
+
+(shutdown-agents)

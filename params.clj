@@ -1,5 +1,8 @@
 { ;; Build parameters shared across all branches
+  :project "core.cache"
+  :project-home "https://github.com/clojure/core.cache/"
   :name "core.cache"
+  :description "A caching library implementing various cache strategies"
   :page-title "core.cache API Reference"
   :copyright "Copyright 2007-2017 by Rich Hickey and the various contributors"
   :source-path ["src/main/clojure"]
