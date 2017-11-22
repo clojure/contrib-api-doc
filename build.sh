@@ -3,7 +3,7 @@
 set -e
 
 # TODO - remove
-PROJECT=core.cache
+PROJECT=core.specs.alpha
 
 # Create or refresh repo
 if [[ ! -d repo ]]; then
@@ -35,7 +35,7 @@ cp -R site/* repo-docs
 echo "Analyzing $PROJECT"
 rm -f analysis.edn
 echo "(def PROJECT \"$PROJECT\") (def VERSION \"$version\")" > proj.clj
-cat proj.clj collect.clj | clojure -C:collect -
+cat proj.clj collect.clj | clojure -J-Dclojure.spec.skip-macros=true -C:collect -
 
 # Run autodoc
 echo "Building $PROJECT"

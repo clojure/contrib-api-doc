@@ -2,6 +2,7 @@
  :paths []
 
  :deps {
+   org.clojure/clojure {:mvn/version "1.9.0-RC1"}
    autodoc/autodoc {:mvn/version "1.1.2"}
  }
 

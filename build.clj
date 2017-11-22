@@ -10,8 +10,9 @@
       (e/read {:eof EOF} rdr))))
 
 (def custom
-  {"core.cache" {:name "A caching library implementing various cache strategies"}
-   "spec.alpha" {:name "Specifying the structure of data and functions."}
+  {"core.cache"       {:name "A caching library implementing various cache strategies"}
+   "core.specs.alpha" {:name "Specs for Clojure core"}
+   "spec.alpha"       {:name "Specifying the structure of data and functions."}
   })
 
 (p/merge-params
