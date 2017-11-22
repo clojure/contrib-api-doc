@@ -7,7 +7,7 @@
   "src/main/clojure"
 
   ;; Analyze these namespaces 
-  "clojure.core.cache"
+  (str "clojure." PROJECT)
 
   ;; Skip loading these namespaces
   ""

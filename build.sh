@@ -3,7 +3,7 @@
 set -e
 
 # TODO - remove
-PROJECT=core.cache
+PROJECT=spec.alpha
 
 # Create or refresh repo
 if [[ ! -d repo ]]; then
@@ -13,6 +13,8 @@ else
   echo "Refreshing repo area"
   (cd repo && git fetch && git reset --hard)
 fi
+version="$(cd repo && mvn -q -N org.codehaus.mojo:exec-maven-plugin:1.3.1:exec -Dexec.executable='echo' -Dexec.args='${project.version}' | tail -1)"
+echo "version=$version"
 
 # Create or clean output directory
 if [[ ! -d repo-docs ]]; then
@@ -32,11 +34,12 @@ cp -R site/* repo-docs
 # Run autodoc-collect
 echo "Analyzing $PROJECT"
 rm -f analysis.edn
-cat collect.clj | clojure -C:collect -
+echo "(def PROJECT \"$PROJECT\") (def VERSION \"$version\")" > proj.clj
+cat proj.clj collect.clj | clojure -C:collect -
 
 # Run autodoc
 echo "Building $PROJECT"
-cat build.clj | clojure -R:build -
+cat proj.clj build.clj | clojure -R:build -
 
 # Commit
 if [[ ! -z "$COMMIT" ]]; then

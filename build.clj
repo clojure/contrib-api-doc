@@ -11,12 +11,25 @@
 
 (def shared (edn-read "params.clj"))
 
-(p/merge-params
-  (merge shared    
-    {:root (str (.getAbsolutePath (File. "repo")) "/")
-     :output-path (str (.getAbsolutePath (File. "repo-docs")) "/")}))
+(def custom
+  {"core.cache" {:name "A caching library implementing various cache strategies"}
+   "spec.alpha" {:name "Specifying the structure of data and functions."}
+  })
 
-(let [branch-info {:name "master" :version "0.6.6" :status "stable" :first? true}
+(p/merge-params
+  (merge shared
+    {:project PROJECT
+     :project-home (str "https://github.com/clojure/" PROJECT "/")
+     :name PROJECT
+     :page-title (str PROJECT " API Reference")
+     :web-home (str "https://clojure.github.io/" PROJECT "/")
+     :web-src-dir (str "https://github.com/clojure/" PROJECT "/blob/")
+     :root (str (.getAbsolutePath (File. "repo")) "/")
+     :output-path (str (.getAbsolutePath (File. "repo-docs")) "/")
+     :branches [{:name "master" :version VERSION :status "in development"}]}
+		(get custom PROJECT)))
+
+(let [branch-info {:name "master" :version VERSION :status "in development" :first? true}
       all-branch-info (:branches shared)]
   (h/make-all-pages branch-info all-branch-info (edn-read "analysis.edn")))
 

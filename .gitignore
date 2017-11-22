@@ -1,5 +1,5 @@
 .cpcache/
 analysis.edn
-/config.clj
+/proj.clj
 /repo/
 /repo-docs/
