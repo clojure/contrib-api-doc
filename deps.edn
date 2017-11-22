@@ -1,0 +1,18 @@
+{
+ :paths []
+
+ :deps {
+   org.clojure/core.cache {:mvn/version "0.6.5"}
+   autodoc/autodoc {:mvn/version "1.1.2"}
+ }
+
+ :aliases {
+   :collect {:extra-paths ["repo/src/main/clojure"]}
+   :build {:override-deps {org.clojure/clojure {:mvn/version "1.9.0-RC1"}}}
+ }
+
+ :mvn/repos {
+   "central" {:url "https://repo1.maven.org/maven2/"}
+   "clojars" {:url "https://clojars.org/repo/"}
+ }
+}

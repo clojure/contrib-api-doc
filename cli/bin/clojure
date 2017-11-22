@@ -1,0 +1,221 @@
+#!/usr/bin/env bash
+
+# Version = 1.9.0-RC1.257
+
+set -e
+
+# Extract opts
+print_classpath=false
+verbose=false
+force=false
+repro=false
+pom=false
+help=false
+java_opts=()
+while [ $# -gt 0 ]
+do
+  case "$1" in
+    -J*)
+      java_opts+=("${1:2}")
+      shift
+      ;;
+    -R*)
+      resolve_aliases="${1:2}"
+      shift
+      ;;
+    -C*)
+      classpath_aliases="${1:2}"
+      shift
+      ;;
+    -Spath)
+      print_classpath=true
+      shift
+      ;;
+    -Sverbose)
+      verbose=true
+      shift
+      ;;
+    -Sforce)
+      force=true
+      shift
+      ;;
+    -Srepro)
+      repro=true
+      shift
+      ;;
+    -Spom)
+      pom=true
+      shift
+      ;;
+    -S*)
+      echo "Invalid option: $1"
+      exit 1
+      ;;
+    -h|--help|"-?")
+      help=true
+      shift
+      ;;
+    *)
+      break
+      ;;
+  esac
+done
+
+# Find java executable
+JAVA_CMD=$(type -p java)
+if [[ ! -n "$JAVA_CMD" ]]; then
+  if [[ -n "$JAVA_HOME" ]] && [[ -x "$JAVA_HOME/bin/java" ]]; then
+    JAVA_CMD="$JAVA_HOME/bin/java"
+  else
+    >&2 echo "Couldn't find 'java'. Please set JAVA_HOME."
+  fi
+fi
+
+if "$help"; then
+  cat <<-END
+	Usage: clojure [dep-opt*] [init-opt*] [main-opt] [arg*]
+	       clj     [dep-opt*] [init-opt*] [main-opt] [arg*]
+
+	The clojure script is a runner for Clojure. clj is a wrapper
+	for interactive repl use. These scripts ultimately construct and
+	invoke a command-line of the form:
+
+	java [java-opt*] -cp classpath clojure.main [init-opt*] [main-opt] [arg*]
+
+	The dep-opts are used to build the java-opts and classpath:
+	 -Jopt      Pass opt through in java_opts, ex: -J-Xmx512m
+	 -Ralias... Concatenated resolve-deps aliases, ex: -R:bench:1.9
+	 -Calias... Concatenated make-classpath aliases, ex: -C:dev
+	 -Spath     Compute classpath and echo to stdout only
+	 -Srepro    Use only the local deps.edn (ignore other config files)
+	 -Sforce    Force recomputation of the classpath (don't use the cache)
+	 -Spom      Generate (or update an existing) pom.xml with deps and paths
+	 -Sverbose  Print important path info to console
+
+	init-opt:
+	 -i, --init path     Load a file or resource
+	 -e, --eval string   Eval exprs in string; print non-nil values
+
+	main-opt:
+	 -m, --main ns-name  Call the -main function from namespace w/args
+	 -r, --repl          Run a repl
+	 path                Run a script from a file or resource
+	 -                   Run a script from standard input
+	 -h, -?, --help      Print this help message and exit
+
+	For more info, see:
+	 https://clojure.org/guides/deps_and_cli
+	 https://clojure.org/reference/repl_and_main
+END
+  exit 0
+fi
+
+# Set dir containing the installed files
+install_dir="$CLJ_INSTALL"
+tools_cp="$install_dir/libexec/clojure-scripts-1.9.0-RC1.257.jar"
+
+# Determine user config directory
+if [[ -n "$CLJ_CONFIG" ]]; then
+  config_dir="$CLJ_CONFIG"
+elif [[ -n "$XDG_CONFIG_HOME" ]]; then
+  config_dir="$XDG_CONFIG_HOME/clojure"
+else
+  config_dir="$HOME/.clojure"
+fi
+
+# If user config directory does not exist, create it
+if [[ ! -d "$config_dir" ]]; then
+  mkdir -p "$config_dir"
+fi
+if [[ ! -e "$config_dir/deps.edn" ]]; then
+  cp "$install_dir/example-deps.edn" "$config_dir/deps.edn"
+fi
+
+# Determine user cache directory
+if [[ -n "$CLJ_CACHE" ]]; then
+  user_cache_dir="$CLJ_CACHE"
+elif [[ -n "$XDG_CACHE_HOME" ]]; then
+  user_cache_dir="$XDG_CACHE_HOME/clojure"
+else
+  user_cache_dir="$config_dir/.cpcache"
+fi
+
+# Chain deps.edn in config paths. repro=use only local.
+if "$repro"; then
+  config_paths=("deps.edn")
+else
+  config_paths=("$install_dir/deps.edn" "$config_dir/deps.edn" "deps.edn")
+fi
+config_str=$(printf ",%s" "${config_paths[@]}")
+config_str=${config_str:1}
+
+# Determine whether to use user or project cache
+if [[ -f deps.edn ]]; then
+  cache_dir=.cpcache
+else
+  cache_dir="$user_cache_dir"
+fi
+
+# Construct location of cached classpath file
+val="$resolve_aliases|$classpath_aliases"
+for config_path in "${config_paths[@]}"; do
+  if [[ -f "$config_path" ]]; then
+    val="$val|$config_path"
+  else
+    val="$val|NIL"
+  fi
+done
+ck=$(echo "$val" | cksum | cut -d" " -f 1)
+
+libs_file="$cache_dir/$ck.libs"
+cp_file="$cache_dir/$ck.cp"
+
+# Print paths in verbose mode
+if "$verbose"; then
+  echo "install_dir  = $install_dir"
+  echo "config_dir   = $config_dir"
+  echo "config_paths =" "${config_paths[@]}"
+  echo "cache_dir    = $cache_dir"
+  echo "cp_file      = $cp_file"
+  echo
+fi
+
+# Check for stale classpath file
+stale=false
+if "$force" || [ ! -f "$cp_file" ]; then
+  stale=true
+else
+  for config_path in "${config_paths[@]}"; do
+    if [ "$config_path" -nt "$cp_file" ]; then
+      stale=true
+      break
+    fi
+  done
+fi
+
+# If stale, run makecp to refresh cached classpath
+if "$stale"; then
+  if "$verbose"; then
+    echo "Refreshing classpath"
+  fi
+
+  tools_args=()
+  if [[ -n "$resolve_aliases" ]]; then
+    tools_args+=("-R$resolve_aliases")
+  fi
+  if [[ -n "$classpath_aliases" ]]; then
+    tools_args+=("-C$classpath_aliases")
+  fi
+
+  "$JAVA_CMD" -Xmx256m -classpath "$tools_cp" clojure.main -m clojure.tools.deps.alpha.makecp "--config-paths=$config_str" "--libs-file=$libs_file" "--cp-file=$cp_file" "${tools_args[@]}"
+fi
+
+cp=$(cat "$cp_file")
+
+if "$pom"; then
+  "$JAVA_CMD" -Xmx256m -classpath "$tools_cp" clojure.main -m clojure.tools.deps.alpha.genmf "--config-paths=$config_str" --gen=pom
+elif "$print_classpath"; then
+  echo "$cp"
+else
+  "$JAVA_CMD" "${java_opts[@]}" -classpath "$cp" clojure.main "$@"
+fi
