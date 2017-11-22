@@ -1,1 +1,2 @@
-cli/ linguist-vendored=false
+cli/* linguist-vendored=false
+*.edn linguist-vendored
