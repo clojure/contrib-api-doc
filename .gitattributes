@@ -1,2 +1,2 @@
-cli/** linguist-vendored=false
+cli/** linguist-vendored
 *.edn linguist-language=Clojure
