@@ -3,7 +3,7 @@
 set -e
 
 # TODO - remove
-PROJECT=core.specs.alpha
+PROJECT=spec.alpha
 
 # Create or refresh repo
 if [[ ! -d repo ]]; then
