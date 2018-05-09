@@ -15,7 +15,7 @@
 
 (p/merge-params
   (merge
-    {:copyright "Copyright 2007-2017 by Rich Hickey and the various contributors"
+    {:copyright "Copyright 2007-2018 by Rich Hickey and the various contributors"
      :source-path ["src/main/clojure"]
      :external-doc-tmpdir "tmp"
      :file-prefix ""
