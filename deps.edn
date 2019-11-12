@@ -2,13 +2,13 @@
  :paths []
 
  :deps {
-   org.clojure/clojure {:mvn/version "1.10.0"}
+   org.clojure/clojure {:mvn/version "1.10.1"}
    autodoc/autodoc {:mvn/version "1.1.2"}
  }
 
  :aliases {
    :collect {:extra-paths ["repo/src/main/clojure"]}
-   :build {:override-deps {org.clojure/clojure {:mvn/version "1.10.0"}}}
+   :build {:override-deps {org.clojure/clojure {:mvn/version "1.10.1"}}}
  }
 
  :mvn/repos {
