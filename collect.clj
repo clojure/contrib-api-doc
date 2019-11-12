@@ -3,6 +3,7 @@
 (def custom {
   "java.jdbc"        "clojure.java.jdbc:clojure.java.jdbc.spec"
   "spec.alpha"       "clojure.spec.alpha:clojure.spec.gen.alpha:clojure.spec.test.alpha"
+  "core.async"       "clojure.core.async"
   })
 
 (collect-info-to-file 
