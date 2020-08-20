@@ -10,6 +10,7 @@
   "tools.deps.alpha" "clojure.tools.deps.alpha:clojure.tools.deps.alpha.reader:clojure.tools.deps.alpha.extensions:clojure.tools.deps.alpha.specs:clojure.tools.deps.alpha.util.coll:clojure.tools.deps.alpha.util.dir:clojure.tools.deps.alpha.util.io:clojure.tools.deps.alpha.util.maven:clojure.tools.deps.alpha.util.session"
   "tools.deps.graph" "clojure.tools.deps.graph"
   "tools.gitlibs" "clojure.tools.gitlibs"
+  "data.int-map" "clojure.data.int-map"
   })
 
 (def custom-trim {
@@ -17,6 +18,7 @@
   "tools.deps.alpha" "clojure.tools.deps."
   "tools.deps.graph" "clojure.tools.deps."
   "tools.gitlibs" "clojure.tools.gitlibs."
+  "data.int-map" "clojure.data.int-map."
   })
 
 (collect-info-to-file 
