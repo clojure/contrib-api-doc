@@ -3,6 +3,7 @@
 (def custom-ns {
   "core.async"       "clojure.core.async"
   "core.cache"       "clojure.core.cache"
+  "core.specs.alpha" "clojure.core.specs.alpha"
   "java.jdbc"        "clojure.java.jdbc:clojure.java.jdbc.spec"
   "spec.alpha"       "clojure.spec.alpha:clojure.spec.gen.alpha:clojure.spec.test.alpha"
   "spec-alpha2"      "clojure.spec-alpha2:clojure.spec-alpha2.gen:clojure.spec-alpha2.test"
