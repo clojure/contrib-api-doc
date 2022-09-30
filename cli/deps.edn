@@ -2,16 +2,20 @@
   :paths ["src"]
 
   :deps {
-    org.clojure/clojure {:mvn/version "1.9.0-RC1"}
+    org.clojure/clojure {:mvn/version "1.11.1"}
   }
 
   :aliases {
-    :deps {:extra-deps {org.clojure/tools.deps.alpha {:mvn/version "0.2.183"}}}
+    :deps {:replace-paths []
+           :replace-deps {org.clojure/tools.deps.alpha {:mvn/version "0.14.1222"}
+                          org.slf4j/slf4j-nop {:mvn/version "1.7.25"}}
+           :ns-default clojure.tools.cli.api
+           :ns-aliases {help clojure.tools.cli.help}}
     :test {:extra-paths ["test"]}
   }
 
   :mvn/repos {
     "central" {:url "https://repo1.maven.org/maven2/"}
-    "clojars" {:url "https://clojars.org/repo/"}
+    "clojars" {:url "https://repo.clojars.org/"}
   }
 }

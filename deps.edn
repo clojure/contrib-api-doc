@@ -2,13 +2,18 @@
  :paths []
 
  :deps {
-   org.clojure/clojure {:mvn/version "1.10.1"}
+   org.clojure/clojure {:mvn/version "1.10.3"}
    autodoc/autodoc {:mvn/version "1.1.2"}
+   autodoc/autodoc-collect {:git/url "https://github.com/tomfaulhaber/autodoc-collect.git"
+                            :git/sha "1a919fdb4c970afc7a656759d25dbbf3529ea768"}
+   org.clojure/tools.deps.alpha {:mvn/version "RELEASE"}
+   org.clojure/spec.alpha {:mvn/version "0.3.218"}
+   ;;org.clojure/data.json {:mvn/version "RELEASE"}
  }
 
  :aliases {
    :collect {:extra-paths ["repo/src/main/clojure"]}
-   :build {:override-deps {org.clojure/clojure {:mvn/version "1.10.1"}}}
+   :build {:override-deps {org.clojure/clojure {:mvn/version "1.10.3"}}}
  }
 
  :mvn/repos {
