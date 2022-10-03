@@ -6,7 +6,7 @@
   "core.specs.alpha" "clojure.core.specs.alpha"
   "java.jdbc"        "clojure.java.jdbc:clojure.java.jdbc.spec"
   "spec.alpha"       "clojure.spec.alpha:clojure.spec.gen.alpha:clojure.spec.test.alpha"
-  "spec-alpha2"      "clojure.spec-alpha2:clojure.spec-alpha2.gen:clojure.spec-alpha2.test"
+  "spec-alpha2"      "clojure.alpha.spec:clojure.alpha.spec.gen:clojure.alpha.spec.test"
   "tools.analyzer.jvm"  "clojure.tools.analyzer.jvm:clojure.tools.analyzer.jvm.utils:clojure.tools.analyzer.passes.jvm.analyze-host-expr:clojure.tools.analyzer.passes.jvm.annotate-branch:clojure.tools.analyzer.passes.jvm.annotate-host-info:clojure.tools.analyzer.passes.jvm.annotate-loops:clojure.tools.analyzer.passes.jvm.annotate-tags:clojure.tools.analyzer.passes.jvm.box:clojure.tools.analyzer.passes.jvm.classify-invoke:clojure.tools.analyzer.passes.jvm.constant-lifter:clojure.tools.analyzer.passes.jvm.emit-form:clojure.tools.analyzer.passes.jvm.fix-case-test:clojure.tools.analyzer.passes.jvm.infer-tag:clojure.tools.analyzer.passes.jvm.validate:clojure.tools.analyzer.passes.jvm.validate-loop-locals:clojure.tools.analyzer.passes.jvm.validate-recur:clojure.tools.analyzer.passes.jvm.warn-on-reflection"
   "tools.deps.alpha" "clojure.tools.cli.api:clojure.tools.cli.help:clojure.tools.deps.alpha:clojure.tools.deps.alpha.specs"
   "tools.deps.graph" "clojure.tools.deps.graph"
