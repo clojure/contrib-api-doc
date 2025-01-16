@@ -1,7 +1,7 @@
 (use 'autodoc-collect.collect-info)
 
 (def custom-ns {
-  "core.async"       "clojure.core.async"
+  "core.async"       "clojure.core.async:clojure.core.async.flow"
   "core.cache"       "clojure.core.cache"
   "core.specs.alpha" "clojure.core.specs.alpha"
   "java.jdbc"        "clojure.java.jdbc:clojure.java.jdbc.spec"
